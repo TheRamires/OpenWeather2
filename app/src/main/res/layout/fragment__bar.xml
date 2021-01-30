@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="Bar"
+            type="ram.ramires.openweathersky2.ViewModel_Sky"/>
+    </data>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ram.ramires.scy5.Fragment_Bar">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:visibility="@{Bar.progressbarObservable}"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="50dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            />
+
+    </FrameLayout>
+</layout>

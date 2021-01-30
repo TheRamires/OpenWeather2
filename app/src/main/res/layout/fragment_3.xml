@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="WeatherReciver"
+            type="ram.ramires.openweathersky2.Fragment_3" />
+        <variable
+            name="WeatherAll"
+            type="ram.ramires.openweathersky2.ViewModel_Sky" />
+
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ram.ramires.scy5.Fragment_3"
+        android:orientation="vertical"
+        android:background="#FCFFFF"
+        android:alpha="0.65">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <EditText
+                inputType="textCapWords"
+                android:layout_marginLeft="90dp"
+                android:id="@+id/editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_text"
+                android:onTextChanged="@{WeatherReciver::getWeatherByCityName}"/>
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/button"
+                android:onClick="@{WeatherReciver::onClick}"/>
+        </LinearLayout>
+
+        <TextView
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{WeatherAll.weatherCurent.name}"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+</layout>

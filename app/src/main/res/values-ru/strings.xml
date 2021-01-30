@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Open Weather Sky</string>
+    <string name="wind_speed">скорость ветра</string>
+    <string name="day">днем</string>
+    <string name="night">ночью</string>
+    <string name="no_internet">Включите определение местоположения по сети, или по всем источникам</string>
+    <string name="metr">м/с</string>
+    <string name="button">Поиск</string>
+    <string name="back">Назад</string>
+    <string name="recommend">Рекомендуется разрешить определение геолокации</string>
+    <string name="edit_text">Введите город</string>
+    <string-array name="title">
+        <item>Текущая</item>
+        <item>Ежедневная</item>
+    </string-array>
+</resources>

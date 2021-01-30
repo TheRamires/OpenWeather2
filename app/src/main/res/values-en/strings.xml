@@ -1,0 +1,17 @@
+
+<resources>
+    <string name="app_name">Open Weather Sky</string>
+    <string name="wind_speed">wind speed</string>
+    <string name="day">day</string>
+    <string name="night">night</string>
+    <string name="no_internet">Please enable location detection by network, or by all sources</string>
+    <string name="metr">m/s</string>
+    <string name="button">Search</string>
+    <string name="back">Back</string>
+    <string name="recommend">We recommend that you allow geolocation detection</string>
+    <string name="edit_text">Enter the city</string>
+    <string-array name="title">
+        <item>Current</item>
+        <item>Daily</item>
+    </string-array>
+</resources>
