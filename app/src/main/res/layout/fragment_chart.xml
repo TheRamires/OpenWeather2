@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FragmentChart">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="horizontal"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:paddingHorizontal="5dp"
+                android:id="@+id/lineChart"
+                android:layout_width="3000dp"
+                android:layout_height="150dp">
+
+            </com.github.mikephil.charting.charts.LineChart>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</FrameLayout>

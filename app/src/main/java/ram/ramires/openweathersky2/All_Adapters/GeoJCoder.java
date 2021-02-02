@@ -34,7 +34,6 @@ public class GeoJCoder {
     }
 
     public double[] getCoordinate(String cityName) {
-        Log.d(LOG, "Geocoder getCoordinate "+cityName);
         double [] lat_lon=new double[2];
         try {
             addresses = gcd.getFromLocationName(cityName, 1);
@@ -52,7 +51,6 @@ public class GeoJCoder {
     /*------- Geocoder getCityName ----------------------------------------------------- */
 
     public String getCityName(Location loc){
-        Log.d(LOG, "Geocoder getCityName");
         Geocoder gcd = new Geocoder(mcontext, Locale.getDefault());
         List<Address> addresses;
         try {

@@ -131,7 +131,7 @@ public class WeathersALL extends BaseObservable {
     public String getDt() {
 
         Locale locale= App.getLocale();
-        String date=new SimpleDateFormat(" E dd.MM",locale).format(dt*1000);
+        String date=new SimpleDateFormat("E dd.MM",locale).format(dt*1000);
         return date;
     }
 

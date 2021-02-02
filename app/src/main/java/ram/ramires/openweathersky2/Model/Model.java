@@ -5,10 +5,13 @@ import android.util.Log;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import ram.ramires.openweathersky2.App;
 import ram.ramires.openweathersky2.pojo.curent.WeathersALL;
+import ram.ramires.openweathersky2.pojo.daily.Hourly;
 import ram.ramires.openweathersky2.pojo.daily.WeatherALL_Daily;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +30,7 @@ public class Model {
     public ObservableField<WeathersALL> weatherCurent;
     public MutableLiveData<WeatherALL_Daily> dailyLiveData;
     public ObservableField<Boolean> progressbarObservable;
+    public MutableLiveData<List<Hourly>> hourlyLiveData;
     private WeathersALL bd_Curent;
     private WeatherALL_Daily bd_daily;
     @Inject
@@ -41,13 +45,16 @@ public class Model {
 
     public void setArguments( ObservableField<WeathersALL> weatherCurent,
                               MutableLiveData<WeatherALL_Daily> dailyLiveData,
-                              ObservableField<Boolean> progressbarObservable){
+                              ObservableField<Boolean> progressbarObservable,
+                              MutableLiveData<List<Hourly>> hourlyLiveData){
         this.weatherCurent=weatherCurent;
         this.dailyLiveData=dailyLiveData;
         this.progressbarObservable=progressbarObservable;
+        this.hourlyLiveData=hourlyLiveData;
     }
 
     public void getWether(double lat, double lon, String city){
+        Log.d(LOG, "getWeather");
         progressbarObservable.set(true);
         Call<WeathersALL> weatherByCity=openWeatherApi.weathersByCity(city, lang);
         weatherByCity.enqueue(new Callbacker(city));
@@ -56,8 +63,6 @@ public class Model {
             Log.d(LOG, "lat "+lat+" lon "+lon+" RETURN");
             return;
         }
-
-
         Call<WeatherALL_Daily> daily = openWeatherApi.dailyByCoordinates(lat, lon, lang);
         daily.enqueue(new Callbacker_Daily(city));
     }
@@ -84,6 +89,7 @@ public class Model {
 
         @Override
         public void onResponse(Call<WeathersALL> call, final Response<WeathersALL> response) {
+            Log.d(LOG, "getWeather onResponse");
             if (response.isSuccessful()) {
 
                 weatherCurent.set(response.body());
@@ -114,10 +120,15 @@ public class Model {
 
         @Override
         public void onResponse(Call<WeatherALL_Daily> call, final Response<WeatherALL_Daily> response) {
+            Log.d(LOG, "getWeather_ Daily onResponse");
             if (response.isSuccessful()) {
-
                 dailyLiveData.setValue(response.body());
                 storage.insert_Db_daily(response.body());
+
+                hourlyLiveData.setValue(response.body().getHourly());
+
+                Log.d(LOG, "getHourly: hours=48 "+response.body().getHourly().size());
+
             } else if (response.code() == 404) {
                 Log.d("myLog", "Calbaker_Daily response code:" + response.code() + " Uncorrect cityname! :(");
                 return;
@@ -128,6 +139,7 @@ public class Model {
         }
         @Override
         public void onFailure(Call call, Throwable t) {
+            Log.d(LOG,"getWeather_ Daily onFailure "+t);
         }
     }
 }

@@ -21,7 +21,7 @@ public class Recycler_View_Adapter extends RecyclerView.Adapter<Recycler_View_Ad
     List<Daily> daily;
     public Recycler_View_Adapter(List<Daily> daily){
         this.daily=daily;
-        Log.d(LOG, "Adapter constructer "+this.daily.size());
+        //Log.d(LOG, "Adapter constructer "+this.daily.size());
     }
 
     @NonNull
@@ -29,14 +29,12 @@ public class Recycler_View_Adapter extends RecyclerView.Adapter<Recycler_View_Ad
     public DailyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
         DailyItemBinding binding=DailyItemBinding.inflate(inflater,parent,false);
-        Log.d(LOG,"Create View Holder");
+        //Log.d(LOG,"Create View Holder");
         return new DailyViewHolder(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull DailyViewHolder holder, int position) {
-        //if (position%2==0){holder.itemView.setBackgroundColor(Color.parseColor("#FFF0F9FA"));
-        // }
         holder.binding.setDailyBind(daily.get(position));
     }
 
@@ -50,7 +48,7 @@ public class Recycler_View_Adapter extends RecyclerView.Adapter<Recycler_View_Ad
 
         public DailyViewHolder(@NonNull View itemView) {
             super(itemView);
-            Log.d(LOG, "Create DailyViewHolder");
+            //Log.d(LOG, "Create DailyViewHolder");
             binding= DataBindingUtil.bind(itemView);
         }
     }

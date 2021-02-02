@@ -34,7 +34,8 @@ public class Weather {
     }
 
     public String getDescription() {
-        return description;
+
+        return description.substring(0, 1).toUpperCase() + description.substring(1);
     }
 
     public void setDescription(String description) {

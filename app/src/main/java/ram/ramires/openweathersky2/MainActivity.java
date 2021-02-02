@@ -48,7 +48,8 @@ public class MainActivity extends FragmentActivity {
         view=(View)findViewById(R.id.frameLayout);
         titleList=getResources().getStringArray(R.array.title);
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        //Клавиатура поверх
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         //------------------------------------View Model----------------------------------
         viewModel = new ViewModelProvider(this).get(ViewModel_Sky.class);

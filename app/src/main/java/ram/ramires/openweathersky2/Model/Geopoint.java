@@ -66,7 +66,6 @@ public class Geopoint {
             model.getWether(lat,lon,city);
             if (city!=null) {
                 Toast.makeText(context, city, Toast.LENGTH_SHORT).show();
-                Log.d(LOG, "city "+city);
             }
         }
 

@@ -42,9 +42,9 @@ public class Fragment_3 extends Fragment {
     //Edit Text ввод города пользователем
     public void getWeatherByCityName(CharSequence s,int start, int count, int after){
         cityName=""+s.toString();
+        Log.d("myLog", "Edtit TExt " + s+"; after = "+after);
         if (cityName.length()>3) {
-            viewModel.getWether(cityName);
-            Log.d("myLog", "Edtit TExt" + s);
+            //viewModel.getWether(cityName);
         }
     }
     public void onClick (View view){

@@ -17,6 +17,7 @@ public class Wind {
     public String getSpeed() {
         int i= (int) Math.round(speed);
         String speed= App.getStrings(R.string.wind_speed);
+        speed=speed.substring(0, 1).toUpperCase() + speed.substring(1);
         String metres=App.getStrings(R.string.metr);
         return speed+" "+i+" "+metres;
     }

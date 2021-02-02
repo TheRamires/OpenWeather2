@@ -33,6 +33,10 @@ public class WeatherALL_Daily extends BaseObservable {
     @Expose
     @TypeConverters(Converter_Daily.class)
     public List<Daily> daily;
+    @SerializedName("hourly")
+    @Expose
+    @TypeConverters(Converter_Hourly.class)
+    private List<Hourly> hourly;
 
     public double getLat() {
         return lat;
@@ -89,4 +93,10 @@ public class WeatherALL_Daily extends BaseObservable {
         return indificate;
     }
 
+    public void setHourly(List<Hourly> hourly){
+        this.hourly=hourly;
+    }
+    public List<Hourly> getHourly(){
+        return hourly;
+    }
 }

@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         tools:context="ram.ramires.scy5.Fragment_3"
         android:orientation="vertical"
-        android:background="#FCFFFF"
+        android:background="#CDCBD1"
         android:alpha="0.65">
 
         <LinearLayout
@@ -25,6 +25,8 @@
 
 
             <EditText
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:backgroundTint="@color/purple_500"
                 inputType="textCapWords"
                 android:layout_marginLeft="90dp"
                 android:id="@+id/editText"
