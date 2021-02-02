@@ -23,7 +23,7 @@ public class ImageBindingAdapter {
             Picasso
                     .with(imageView.getContext())
                     .load(urlll)
-                    .resize(200, 200)
+                    .resize(150, 150)
                     .error(R.drawable.ic_launcher_foreground)
                     .into(imageView);
 

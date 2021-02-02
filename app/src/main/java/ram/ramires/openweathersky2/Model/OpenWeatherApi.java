@@ -10,7 +10,7 @@ public interface OpenWeatherApi {
     @GET("weather?&units=metric&appid=37d184338de4e1a807dd7600a4bff3b9")
     Call<WeathersALL> weathersByCity (@Query("q") String city, @Query("lang") String lang);
 
-    @GET("weather?&units=metric&lang=ru&units=metric&appid=37d184338de4e1a807dd7600a4bff3b9")
+    @GET("weather?&units=metric&appid=37d184338de4e1a807dd7600a4bff3b9")
     Call<WeathersALL> weathersByCoordinates (@Query("lat") double lat, @Query("lon") double lon, @Query("lang") String lang) ;
 
     @GET("onecall?exclude=current,minutely,alerts&units=metric&appid=37d184338de4e1a807dd7600a4bff3b9")

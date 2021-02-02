@@ -1,5 +1,4 @@
 package ram.ramires.openweathersky2;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -218,76 +217,9 @@ public class FragmentChart extends Fragment {
             }
         }
     }
-
-    /*class DrawablesIcons {
-        private List<String> listDrawablesID;
-        private Drawable [] drawblesArr;
-        private Boolean iterateBool=new Boolean(false);
-
-        public DrawablesIcons(List<String> listDrawablesID){
-            this.listDrawablesID=listDrawablesID;
-            drawblesArr=new Drawable[listDrawablesID.size()];
-        }
-        public void toAssembly(){
-            iterate();
-        }
-
-        private void iterate(){
-            drawblesArr[0]=null;
-            for (int i=1; i<drawblesArr.length; i++){
-                Log.d(LOG,i+" "+listDrawablesID.get(i));
-                if (!listDrawablesID.get(i).equals(listDrawablesID.get(i-1))){
-                    Log.d(LOG,i+" start picas");
-                    picas(listDrawablesID.get(i), i);
-                } else {
-                    picas("", i);
-                }
-            }
-            iterateBool=true;
-        }
-        private void picas(String url, int count){
-            Picasso.with(requireContext())
-                    .load("http://openweathermap.org/img/wn/"+url+".png")
-                    .resize(100,100)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            Drawable drawable=new BitmapDrawable(getResources(),bitmap);
-                            drawblesArr[count]=drawable;
-                            Log.d(LOG,count+" picased");
-                            if (iterateBool && count==drawblesArr.length-1){
-                                Log.d(LOG,count+" picas complited");
-                                drawablesArray.setValue(drawblesArr);
-                                iterateBool=false;
-                                //final of process
-                            }
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                            Log.d(LOG,count+" picas Failed");
-                            if (iterateBool && count==drawblesArr.length-1){
-                                Log.d(LOG,count+" picas complited onFailedMethod");
-                                drawablesArray.setValue(drawblesArr);
-                                iterateBool=false;
-                                //final of process
-                            }
-
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-        }
-    }*/
     class DrawablesIcons{
         private List<Hourly> hourlies;
         private int maxSize;
-        private long dt;
-        private String icon;
-
         Map<Long,Drawable> drawableMap;
 
         public DrawablesIcons(List<Hourly> hourlies){
@@ -316,7 +248,6 @@ public class FragmentChart extends Fragment {
                         if (drawableMap.size()==maxSize){
                             Log.d("myLog2","Count "+count+"; DrawablesIcons iscomplited");
                             drawableLive.setValue(toSort(drawableMap));
-
                         }
                     }
 

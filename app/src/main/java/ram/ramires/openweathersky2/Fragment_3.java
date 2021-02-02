@@ -25,10 +25,9 @@ public class Fragment_3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Fragment3Binding binding_3=Fragment3Binding.inflate(inflater,container,false);
         viewModel = new ViewModelProvider(requireActivity()).get(ViewModel_Sky.class);
 
-        Fragment3Binding binding_3=Fragment3Binding.inflate(inflater,container,false);
         binding_3.setWeatherReciver(this);
         binding_3.setWeatherAll(viewModel);
 
