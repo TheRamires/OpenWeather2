@@ -108,6 +108,9 @@ public class FragmentChart extends Fragment {
         liveDrawbles.observe(getViewLifecycleOwner(), new Observer<Map<Long, Draw>>() {
             @Override
             public void onChanged(Map<Long, Draw> longDrawMap) {
+                if (hourlies.size()==0){
+                    return;
+                }
                 List<Long> dateList=new ArrayList<>(longDrawMap.keySet());
                 List<Draw> drawList=new ArrayList<>(getListDraw(longDrawMap));
                 List<Entry> entryList=new ArrayList<>();
@@ -149,13 +152,15 @@ public class FragmentChart extends Fragment {
     }
     private void createSet(List<Entry> yValues){
         // III.
+        viewModel.visibilityChart.set(true);
         LineDataSet set1;
         set1=new LineDataSet(yValues, "");
 
+        //set1.removeEntry(35);
         set1.setColor(getResources().getColor(R.color.purple_700));
         set1.setCircleColor(Color.BLACK);
         set1.setLineWidth(2f);
-        set1.setValueTextSize(17f);
+        set1.setValueTextSize(15f);
         set1.setValueTextColor(Color.BLACK);
 
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -170,8 +175,9 @@ public class FragmentChart extends Fragment {
             public String getFormattedValue(float value) {
                 int i=Math.round(value);
                 String str=String.valueOf(i);
+                String res="    "+str.split(".",1)[0]+"°C";
 
-                return str.split(".",1)[0]+"°C";
+                return res;
             }
         });
 

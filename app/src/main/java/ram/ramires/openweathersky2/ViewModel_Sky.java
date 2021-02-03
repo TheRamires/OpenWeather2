@@ -29,17 +29,19 @@ public class ViewModel_Sky extends AndroidViewModel {
     public MutableLiveData<WeatherALL_Daily> dailyLiveData=new MutableLiveData<>();
     public MutableLiveData<List<Hourly>> hourlyLiveData=new MutableLiveData<>();
     public ObservableField<Boolean> progressbarObservable=new ObservableField<>();
-    public ObservableField<Boolean> visibility=new ObservableField<>(false);
+    public ObservableField<Boolean> visibilityRecycler=new ObservableField<>(false);
+    public ObservableField<Boolean> visibilityChart=new ObservableField<>(false);
     private double lat;
     private double lon;
 
     public ViewModel_Sky(@NonNull Application application) {
         super(application);
 
-        Log.d(LOG2, "Visibility -> "+visibility.get());
+        Log.d(LOG2, "Visibility -> "+visibilityRecycler.get());
 
         App.getGeoComponent().injectsViewModel(this);
-        model.setArguments(weatherCurent,dailyLiveData,progressbarObservable,visibility, hourlyLiveData);
+        model.setArguments(weatherCurent,dailyLiveData,progressbarObservable
+                ,visibilityRecycler,visibilityChart, hourlyLiveData);
         storageDb();
     }
     private void storageDb()  {

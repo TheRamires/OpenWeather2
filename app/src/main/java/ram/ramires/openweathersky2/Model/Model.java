@@ -32,7 +32,8 @@ public class Model {
     public MutableLiveData<WeatherALL_Daily> dailyLiveData;
     public ObservableField<Boolean> progressbarObservable;
     public MutableLiveData<List<Hourly>> hourlyLiveData;
-    public ObservableField<Boolean> visibility;
+    public ObservableField<Boolean> visibilityRecycler;
+    public ObservableField<Boolean> visibilityChart;
     private WeathersALL bd_Curent;
     private WeatherALL_Daily bd_daily;
     private int cheakTemp;
@@ -49,12 +50,14 @@ public class Model {
     public void setArguments( ObservableField<WeathersALL> weatherCurent,
                               MutableLiveData<WeatherALL_Daily> dailyLiveData,
                               ObservableField<Boolean> progressbarObservable,
-                              ObservableField<Boolean> visibility,
+                              ObservableField<Boolean> visibilityRecycler,
+                              ObservableField<Boolean> visibilityChart,
                               MutableLiveData<List<Hourly>> hourlyLiveData){
         this.weatherCurent=weatherCurent;
         this.dailyLiveData=dailyLiveData;
         this.progressbarObservable=progressbarObservable;
-        this.visibility=visibility;
+        this.visibilityRecycler=visibilityRecycler;
+        this.visibilityChart=visibilityChart;
         this.hourlyLiveData=hourlyLiveData;
     }
 
@@ -94,10 +97,11 @@ public class Model {
 
         @Override
         public void onResponse(Call<WeathersALL> call, final Response<WeathersALL> response) {
-            visibility.set(false);
-            Log.d(LOG2, "Visibility false");
-            Log.d(LOG, "getWeather onResponse");
             if (response.isSuccessful()) {
+                visibilityRecycler.set(false);
+                visibilityChart.set(false);
+                Log.d(LOG2, "Visibility false");
+                Log.d(LOG, "getWeather onResponse");
                 cheakTemp= (int) response.body().main.temp;
 
                 weatherCurent.set(response.body());
@@ -113,8 +117,7 @@ public class Model {
 
         @Override
         public void onFailure(Call call, Throwable t) {
-            visibility.set(false);
-            Log.d(LOG2, "Visibility false");
+            Log.d(LOG2, "onFailure☺");
             storage.query_Db_Curent(city, weatherCurent);
             storage.query_Db_Daily(city, dailyLiveData);
             progressbarObservable.set(false);
@@ -136,7 +139,7 @@ public class Model {
                 Log.d(LOG2,"getCheack: "+cheakTemp+"; "+cheakTemp2+" abc: "+getCheak(cheakTemp, cheakTemp2));
                 return;
             }
-            visibility.set(true);
+            visibilityRecycler.set(true);
             Log.d(LOG2, "Visibility true");
 
             if (response.isSuccessful()) {

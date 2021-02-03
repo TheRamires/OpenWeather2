@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="WeatherReciver"
@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
             <EditText
+                android:text="@{WeatherReciver.clear}"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:backgroundTint="@color/purple_500"
                 inputType="textCapWords"
@@ -34,11 +34,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/edit_text"
                 android:onTextChanged="@{WeatherReciver::getWeatherByCityName}"/>
-            <Button
+
+            <ImageButton
+                android:focusable="true"
+                android:background="#CDCBD1"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/erase_18dp"
+                android:clickable="true"
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/button"
+                android:layout_height="50dp"
                 android:onClick="@{WeatherReciver::onClick}"/>
         </LinearLayout>
 
