@@ -18,6 +18,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static ram.ramires.openweathersky2.FragmentChart.LOG2;
 import static ram.ramires.openweathersky2.MainActivity.LOG;
 
 public class Model {
@@ -31,8 +32,10 @@ public class Model {
     public MutableLiveData<WeatherALL_Daily> dailyLiveData;
     public ObservableField<Boolean> progressbarObservable;
     public MutableLiveData<List<Hourly>> hourlyLiveData;
+    public ObservableField<Boolean> visibility;
     private WeathersALL bd_Curent;
     private WeatherALL_Daily bd_daily;
+    private int cheakTemp;
     @Inject
     public String lang;
 
@@ -46,10 +49,12 @@ public class Model {
     public void setArguments( ObservableField<WeathersALL> weatherCurent,
                               MutableLiveData<WeatherALL_Daily> dailyLiveData,
                               ObservableField<Boolean> progressbarObservable,
+                              ObservableField<Boolean> visibility,
                               MutableLiveData<List<Hourly>> hourlyLiveData){
         this.weatherCurent=weatherCurent;
         this.dailyLiveData=dailyLiveData;
         this.progressbarObservable=progressbarObservable;
+        this.visibility=visibility;
         this.hourlyLiveData=hourlyLiveData;
     }
 
@@ -89,8 +94,11 @@ public class Model {
 
         @Override
         public void onResponse(Call<WeathersALL> call, final Response<WeathersALL> response) {
+            visibility.set(false);
+            Log.d(LOG2, "Visibility false");
             Log.d(LOG, "getWeather onResponse");
             if (response.isSuccessful()) {
+                cheakTemp= (int) response.body().main.temp;
 
                 weatherCurent.set(response.body());
                 storage.insert_Db_curent(response.body());
@@ -105,6 +113,8 @@ public class Model {
 
         @Override
         public void onFailure(Call call, Throwable t) {
+            visibility.set(false);
+            Log.d(LOG2, "Visibility false");
             storage.query_Db_Curent(city, weatherCurent);
             storage.query_Db_Daily(city, dailyLiveData);
             progressbarObservable.set(false);
@@ -121,6 +131,14 @@ public class Model {
         @Override
         public void onResponse(Call<WeatherALL_Daily> call, final Response<WeatherALL_Daily> response) {
             Log.d(LOG, "getWeather_ Daily onResponse");
+            int cheakTemp2=response.body().getHourly().get(0).getTemp();
+            if (getCheak(cheakTemp, cheakTemp2)>2){
+                Log.d(LOG2,"getCheack: "+cheakTemp+"; "+cheakTemp2+" abc: "+getCheak(cheakTemp, cheakTemp2));
+                return;
+            }
+            visibility.set(true);
+            Log.d(LOG2, "Visibility true");
+
             if (response.isSuccessful()) {
                 dailyLiveData.setValue(response.body());
                 storage.insert_Db_daily(response.body());
@@ -141,5 +159,8 @@ public class Model {
         public void onFailure(Call call, Throwable t) {
             Log.d(LOG,"getWeather_ Daily onFailure "+t);
         }
+    }
+    private int getCheak(int a, int b){
+        return Math.abs(a-b);
     }
 }

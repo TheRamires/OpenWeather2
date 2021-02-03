@@ -63,7 +63,7 @@
 
         <fragment
             android:layout_below="@+id/textView3"
-            android:layout_marginVertical="40dp"
+            android:layout_marginTop="55dp"
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="150dp"

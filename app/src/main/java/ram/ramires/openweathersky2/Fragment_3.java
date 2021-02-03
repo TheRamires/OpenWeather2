@@ -43,7 +43,7 @@ public class Fragment_3 extends Fragment {
         cityName=""+s.toString();
         Log.d("myLog", "Edtit TExt " + s+"; after = "+after);
         if (cityName.length()>3) {
-            //viewModel.getWether(cityName);
+            viewModel.getWether(cityName);
         }
     }
     public void onClick (View view){

@@ -27,32 +27,38 @@ import android.view.ViewGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
+import ram.ramires.openweathersky2.databinding.FragmentChartBinding;
+import ram.ramires.openweathersky2.pojo.Draw;
 import ram.ramires.openweathersky2.pojo.daily.Hourly;
 
 public class FragmentChart extends Fragment {
+    public static final String LOG2="myLog2";
     private MutableLiveData<Drawable> liveIcons=new MutableLiveData();
     private MutableLiveData<Drawable[]> drawablesArray=new MutableLiveData<>();
     private MutableLiveData<List<Map.Entry<Long,Drawable>>> drawableLive=new MutableLiveData<>();
+
+    private MutableLiveData<Map<Long,Draw>> liveDrawbles=new MutableLiveData<>();
     ViewModel_Sky viewModel;
     LineChart mChart;
     XAxis xAxis;
     YAxis yAxis;
     String url;
-    List<Hourly> hourlies=new ArrayList<>();
+    List<Double> hourlies=new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewModel=new ViewModelProvider(requireActivity()).get(ViewModel_Sky.class);
+        FragmentChartBinding binding=FragmentChartBinding.inflate(inflater, container,false);
+        binding.setInvisible(viewModel);
 
-        View view=inflater.inflate(R.layout.fragment_chart, container, false);
+        View view=binding.getRoot();
 
         mChart=(LineChart) view.findViewById(R.id.lineChart);
 
@@ -73,27 +79,14 @@ public class FragmentChart extends Fragment {
         viewModel.hourlyLiveData.observe(getViewLifecycleOwner(), new Observer<List<Hourly>>() {
             @Override
             public void onChanged(List<Hourly> values) {
-                List<String> iconsList=new ArrayList<>();
-                for (Hourly hourly:values){
-                    iconsList.add(
-                        hourly.getWeather().get(0).getIcon());
-                }
-                //url=values.get(0).getWeather().get(0).getIcon();
-                //setDrawable(url);
 
+                List<Long> dates=new ArrayList<>();
+                for (int i=0;i<values.size();i++){
+                    dates.add(values.get(i).getDt()*1000);
+                    hourlies.add((double) values.get(i).getTemp());
+                }
                 DrawablesIcons drawablesIcons=new DrawablesIcons(values);
                 drawablesIcons.toAssembly();
-
-                //long currentDate=System.currentTimeMillis();
-
-                hourlies.clear();
-                hourlies.addAll(values);
-
-                List <Long> dates=new ArrayList<>();
-                for (int i=0;i<values.size();i++){
-                    long temp=values.get(i).getDt()*1000;
-                        dates.add(temp);
-                }
 
                 xAxis=mChart.getXAxis();
                 xAxis.setAxisMaximum(35f);
@@ -105,62 +98,56 @@ public class FragmentChart extends Fragment {
                 xAxis.setTextColor(getResources().getColor(R.color.purple_700));
                 xAxis.setGranularityEnabled(true);
                 xAxis.setGranularity(1);
-                //xAxis.setValueFormatter(new MyXAxisValueFormater(dates));
+                xAxis.setValueFormatter(new MyXAxisValueFormater(dates));
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 yAxis =mChart.getAxisLeft();
 
                //setData(values, null);
             }
         });
+        liveDrawbles.observe(getViewLifecycleOwner(), new Observer<Map<Long, Draw>>() {
+            @Override
+            public void onChanged(Map<Long, Draw> longDrawMap) {
+                List<Long> dateList=new ArrayList<>(longDrawMap.keySet());
+                List<Draw> drawList=new ArrayList<>(getListDraw(longDrawMap));
+                List<Entry> entryList=new ArrayList<>();
+                Log.d(LOG2,"liveDrawblesobserve onChanged: dateList "+dateList.size()+" DrawList: "+drawList.size());
 
-        /*drawablesArray.observe(getViewLifecycleOwner(), new Observer<Drawable[]>() {
-            @Override
-            public void onChanged(Drawable[] drawablesArr) {
-                setData(hourlies, drawablesArr);
-            }
-        });*/
-        drawableLive.observe(getViewLifecycleOwner(), new Observer<List<Map.Entry<Long,Drawable>>>() {
-            @Override
-            public void onChanged(List<Map.Entry<Long,Drawable>> entries) {
-                Log.d("myLog2","drawableLive is observe");
-                setData(hourlies,entries);
+                for (Long lo:dateList){
+                    Log.d(LOG2, ""+lo);
+                }
+
+                for (int i=0;i<dateList.size();i++){
+                    float f=Math.round(hourlies.get(i));
+                    Entry entry=new Entry(i,f,drawList.get(i).getDrawable(),"");
+                    entryList.add(entry);
+                }
+                hourlies.clear();
+                Log.d(LOG2,"EntryList.Size "+entryList.size());
+                createSet(entryList);
+
             }
         });
+
         return view;
     }
-    private void setData (List<Hourly> values, List<Map.Entry<Long,Drawable>> entries){
-        // I. Распаковка
-        Log.d("myLog2","setData");
-        List<Long> dates=new ArrayList<>();
-        List<Drawable> drawables=new ArrayList<>();
-        for (int i=0;i<entries.size();i++){
-            dates.add(entries.get(i).getKey()*1000);
-            drawables.add((Drawable) entries.get(i).getValue());
+    private List<Draw> getListDraw(Map<Long, Draw> longDrawMap){
+        List<Draw> startList=new ArrayList<>(longDrawMap.values());
+        Log.d(LOG2, "getListDraw, startList.size= "+startList.size());
+        List<Draw> finishList=new ArrayList<>();
+
+        finishList.add(new Draw(startList.get(0).getIdIcon(),startList.get(0).getDrawable()));
+        for (int i=1;i<startList.size();i++){
+            String currentIcon=startList.get(i).getIdIcon();
+            String previoslytIcon=startList.get(i-1).getIdIcon();
+            Drawable drawable=startList.get(i).getDrawable();
+            if (!currentIcon.equals(previoslytIcon)) {
+                finishList.add(new Draw(currentIcon, drawable));
+            } else {finishList.add(new Draw(currentIcon, null));}
         }
-
-        // II.
-        ArrayList<Entry> yValues= new ArrayList<>();
-        Log.d("myLog2","drawables SIZE: "+entries.size()+" values SIZE: "+values.size());
-
-        for (int i=0;i<values.size();i++){
-            float f=values.get(i).getTemp();
-            Drawable drawable;
-            if (i==0){
-                yValues.add(new Entry(i,Math.round(f),drawables.get(i)));
-                continue;
-            }
-            String current=values.get(i).getWeather().get(0).getIcon();
-            String priviosly=values.get(i-1).getWeather().get(0).getIcon();
-            Log.d("myLog2", ""+i+" "+current);
-
-            if (!current.equals(priviosly)){
-                drawable=drawables.get(i);
-            } else {drawable=null; }
-
-            yValues.add(new Entry(i,Math.round(f),drawable));
-        }
-        xAxis.setValueFormatter(new MyXAxisValueFormater(dates));
-
+        return finishList;
+    }
+    private void createSet(List<Entry> yValues){
         // III.
         LineDataSet set1;
         set1=new LineDataSet(yValues, "");
@@ -218,66 +205,73 @@ public class FragmentChart extends Fragment {
         }
     }
     class DrawablesIcons{
-        private List<Hourly> hourlies;
         private int maxSize;
-        Map<Long,Drawable> drawableMap;
-
+        private List<String> listKey;
+        private List<Long> listDates;
+        private SortedMap<Long,Draw> mapIcon;
         public DrawablesIcons(List<Hourly> hourlies){
-            Log.d("myLog2","DrawablesIcons is create");
-            this.hourlies=hourlies;
             maxSize=hourlies.size();
-            drawableMap=new HashMap<>();
+            listKey=new ArrayList<>(getIdIcons(hourlies));
+            listDates=new ArrayList<>(getDates(hourlies));
+            Log.d(LOG2, "listKey.Size= "+listKey.size()+"; listDates.Size= "+listDates.size());
+            mapIcon=new TreeMap<>();
+            Log.d(LOG2,"DrawablesIcons create");
         }
-        public void toAssembly(){
-            Log.d("myLog2","DrawablesIcons toAssembly");
-            for (int i=0;i<maxSize;i++){
-                toPicas(hourlies, hourlies.get(i).getWeather().get(0).getIcon(), i);
-            }
-        }
-        private void toPicas(List<Hourly> hourlies, String url, int count){
-            Picasso.with(requireContext())
-                .load("http://openweathermap.org/img/wn/"+url+".png")
-                .resize(100,100)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        Log.d("myLog2","Count "+count+"; DrawablesIcons onBitmapLoaded");
-                        Drawable drawable=new BitmapDrawable(getResources(),bitmap);
-                        drawableMap.put(hourlies.get(count).getDt(),
-                                drawable);
-                        if (drawableMap.size()==maxSize){
-                            Log.d("myLog2","Count "+count+"; DrawablesIcons iscomplited");
-                            drawableLive.setValue(toSort(drawableMap));
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                        Log.d("myLog2","Count "+count+"; DrawablesIcons onBitmapFailed");
-                        drawableMap.put(hourlies.get(count).getDt(),
-                                null);
-                        if (drawableMap.size()==maxSize){
-                            Log.d("myLog2","Count "+count+"; DrawablesIcons iscomplited on Failure");
-                            drawableLive.setValue(toSort(drawableMap));
-
-                        }
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
-        }
-        private List<Map.Entry<Long,Drawable>> toSort(Map<Long,Drawable> map){
-            List<Map.Entry<Long,Drawable>>list=new ArrayList(map.entrySet());
-            Collections.sort(list, new Comparator<Map.Entry<Long,Drawable>>() {
-                @Override
-                public int compare(Map.Entry<Long, Drawable> o1, Map.Entry<Long, Drawable> o2) {
-                    return o1.getKey().compareTo(o2.getKey());
+        public void toAssembly (){
+            Log.d(LOG2,"toAssembly");
+                for (int i=0;i<listKey.size();i++){
+                    Log.d(LOG2,"i= "+i);
+                    String url=listKey.get(i);
+                    toPicas(listDates.get(i),url, i);
                 }
-            });
-            return  list;
+            }
+
+        private void toPicas(Long date,String url, int count){
+            Picasso.with(requireContext())
+                    .load("http://openweathermap.org/img/wn/"+url+"@2x.png")
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            Log.d(LOG2,count+" "+url +" onBitmapLoaded ");
+                            Drawable drawable=new BitmapDrawable(getResources(),bitmap);
+                            mapIcon.put(date,new Draw(url,drawable));
+                            if (mapIcon.size()==maxSize) {
+                                Log.d(LOG2,url +" FINISH PICAS onBitmapLoaded "+mapIcon.size());
+                                liveDrawbles.setValue(mapIcon);
+                            }
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                            Log.d(LOG2,count+" "+url+" onBitmapFailed ");
+                            mapIcon.put(date,new Draw(url,null));
+                            if (mapIcon.size()==maxSize) {
+                                Log.d(LOG2,url +" FINISH PICAS onBitmapFailed "+mapIcon.size());
+                                liveDrawbles.setValue(mapIcon);
+                            }
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+        }
+        private List<Long> getDates(List<Hourly> hourlies){
+            List<Long> dates=new ArrayList<>();
+            for (Hourly hourly: hourlies){
+                dates.add(hourly.getDt()*1000);
+            }
+            return dates;
+        }
+
+        private List<String> getIdIcons(List<Hourly> hourlies){
+            List<String> icons=new ArrayList<>();
+            for(Hourly hourly:hourlies) {
+                String key=hourly.getWeather().get(0).getIcon();
+                icons.add(key);
+            }
+            return icons;
         }
     }
 }

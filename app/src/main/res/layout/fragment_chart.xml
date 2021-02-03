@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="invisible"
+            type="ram.ramires.openweathersky2.ViewModel_Sky" />
+    </data>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,6 +21,7 @@
             android:layout_height="match_parent">
 
             <com.github.mikephil.charting.charts.LineChart
+                android:visibility="@{invisible.visibility}"
                 android:paddingHorizontal="5dp"
                 android:id="@+id/lineChart"
                 android:layout_width="3000dp"
@@ -23,5 +30,5 @@
             </com.github.mikephil.charting.charts.LineChart>
         </LinearLayout>
     </HorizontalScrollView>
-
 </FrameLayout>
+</layout>
