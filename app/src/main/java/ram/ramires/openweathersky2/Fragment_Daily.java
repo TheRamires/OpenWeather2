@@ -38,7 +38,7 @@ public class Fragment_Daily extends Fragment {
                 if (weatherALL_daily==null){
                     return;
                 }
-                Log.d(MainActivity.LOG, weatherALL_daily.daily.size()+"");
+                //Log.d(MainActivity.LOG, weatherALL_daily.daily.size()+"");
                 RecyclerView.Adapter adapter=new Recycler_View_Adapter(weatherALL_daily.daily);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
                 recyclerView.setHasFixedSize(true);

@@ -1,7 +1,4 @@
 package ram.ramires.openweathersky2.Model;
-
-import android.util.Log;
-
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,8 +9,6 @@ import ram.ramires.openweathersky2.Room.AppDatabase;
 import ram.ramires.openweathersky2.Room.DaoWeather;
 import ram.ramires.openweathersky2.pojo.curent.WeathersALL;
 import ram.ramires.openweathersky2.pojo.daily.WeatherALL_Daily;
-
-import static ram.ramires.openweathersky2.MainActivity.LOG;
 
 public class Storage {
     private String city;
@@ -26,13 +21,11 @@ public class Storage {
 
     public void insert_Db_curent (WeathersALL response){
         if (response==null){
-            Log.d(LOG,"insert_Db =null");
             return;
         }
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(LOG,"insert_Db ="+response.getName());
                 city = response.getName();
 
                 time = System.currentTimeMillis();
@@ -53,7 +46,6 @@ public class Storage {
 
     public void insert_Db_daily (WeatherALL_Daily response){
         if (response==null){
-            Log.d(LOG,"insert_Db =null");
             return;
         }
         Thread thread=new Thread(new Runnable() {
@@ -62,7 +54,6 @@ public class Storage {
 
                 //daily---------------------------------------//
                 response.setCity(city);
-                Log.d(LOG,"insert_Db_Daily  ="+response.daily.size());
 
                 indificate=daoWeather.getIndificate_Daily(city);
                 if(indificate!=0){

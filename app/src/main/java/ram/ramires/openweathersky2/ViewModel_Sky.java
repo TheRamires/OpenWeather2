@@ -1,13 +1,11 @@
 package ram.ramires.openweathersky2;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,7 +16,6 @@ import ram.ramires.openweathersky2.pojo.curent.WeathersALL;
 import ram.ramires.openweathersky2.pojo.daily.Hourly;
 import ram.ramires.openweathersky2.pojo.daily.WeatherALL_Daily;
 
-import static ram.ramires.openweathersky2.FragmentChart.LOG2;
 
 public class ViewModel_Sky extends AndroidViewModel {
     @Inject
@@ -36,8 +33,6 @@ public class ViewModel_Sky extends AndroidViewModel {
 
     public ViewModel_Sky(@NonNull Application application) {
         super(application);
-
-        Log.d(LOG2, "Visibility -> "+visibilityRecycler.get());
 
         App.getGeoComponent().injectsViewModel(this);
         model.setArguments(weatherCurent,dailyLiveData,progressbarObservable

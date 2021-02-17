@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,9 +19,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static ram.ramires.openweathersky2.FragmentChart.LOG2;
-import static ram.ramires.openweathersky2.MainActivity.LOG;
 
 public class Model {
     @Inject
@@ -62,13 +61,11 @@ public class Model {
     }
 
     public void getWether(double lat, double lon, String city){
-        Log.d(LOG, "getWeather");
         progressbarObservable.set(true);
         Call<WeathersALL> weatherByCity=openWeatherApi.weathersByCity(city, lang);
         weatherByCity.enqueue(new Callbacker(city));
 
         if (lat==0.0 && lon==0.0){
-            Log.d(LOG, "lat "+lat+" lon "+lon+" RETURN");
             return;
         }
         Call<WeatherALL_Daily> daily = openWeatherApi.dailyByCoordinates(lat, lon, lang);
@@ -98,26 +95,21 @@ public class Model {
         @Override
         public void onResponse(Call<WeathersALL> call, final Response<WeathersALL> response) {
             if (response.isSuccessful()) {
+                Log.d("myLog",response.body().getWeather().toString());
                 visibilityRecycler.set(false);
                 visibilityChart.set(false);
-                Log.d(LOG2, "Visibility false");
-                Log.d(LOG, "getWeather onResponse");
                 cheakTemp= (int) response.body().main.temp;
 
                 weatherCurent.set(response.body());
                 storage.insert_Db_curent(response.body());
             } else if (response.code() == 404) {
-                Log.d("myLog", "Calbaker Curent response code:" + response.code()
-                        + " Uncorrect cityname! :(");
             } else {
-                Log.d("myLog", "Calbaker Curent response code " + response.code());
             }
             progressbarObservable.set(false);
         }
 
         @Override
         public void onFailure(Call call, Throwable t) {
-            Log.d(LOG2, "onFailure☺");
             storage.query_Db_Curent(city, weatherCurent);
             storage.query_Db_Daily(city, dailyLiveData);
             progressbarObservable.set(false);
@@ -133,34 +125,28 @@ public class Model {
 
         @Override
         public void onResponse(Call<WeatherALL_Daily> call, final Response<WeatherALL_Daily> response) {
-            Log.d(LOG, "getWeather_ Daily onResponse");
             int cheakTemp2=response.body().getHourly().get(0).getTemp();
             if (getCheak(cheakTemp, cheakTemp2)>2){
-                Log.d(LOG2,"getCheack: "+cheakTemp+"; "+cheakTemp2+" abc: "+getCheak(cheakTemp, cheakTemp2));
                 return;
             }
             visibilityRecycler.set(true);
-            Log.d(LOG2, "Visibility true");
 
             if (response.isSuccessful()) {
+                Log.d("myLog", response.body().getHourly().toString());
                 dailyLiveData.setValue(response.body());
                 storage.insert_Db_daily(response.body());
 
                 hourlyLiveData.setValue(response.body().getHourly());
 
-                Log.d(LOG, "getHourly: hours=48 "+response.body().getHourly().size());
 
             } else if (response.code() == 404) {
-                Log.d("myLog", "Calbaker_Daily response code:" + response.code() + " Uncorrect cityname! :(");
                 return;
             } else {
-                Log.d("myLog", "Calbaker_Daily response code " + response.code());
             }
             progressbarObservable.set(false);
         }
         @Override
         public void onFailure(Call call, Throwable t) {
-            Log.d(LOG,"getWeather_ Daily onFailure "+t);
         }
     }
     private int getCheak(int a, int b){

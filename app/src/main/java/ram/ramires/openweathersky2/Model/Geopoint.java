@@ -19,7 +19,6 @@ import ram.ramires.openweathersky2.All_Adapters.GeoJCoder;
 import ram.ramires.openweathersky2.App;
 import ram.ramires.openweathersky2.R;
 
-import static ram.ramires.openweathersky2.MainActivity.LOG;
 
 public class Geopoint {
     private LocationManager locationManager;
@@ -71,7 +70,6 @@ public class Geopoint {
 
         @Override
         public void onProviderDisabled(String provider) {
-            Log.d(LOG,"Geopoint Disable");
             context.startActivity(new Intent(
                     android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             Toast.makeText(context, R.string.no_internet, Toast.LENGTH_LONG).show();

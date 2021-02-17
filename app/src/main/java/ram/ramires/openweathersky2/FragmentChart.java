@@ -39,7 +39,7 @@ import ram.ramires.openweathersky2.pojo.Draw;
 import ram.ramires.openweathersky2.pojo.daily.Hourly;
 
 public class FragmentChart extends Fragment {
-    public static final String LOG2="myLog2";
+    //public static final String LOG2="myLog2";
     private MutableLiveData<Drawable> liveIcons=new MutableLiveData();
     private MutableLiveData<Drawable[]> drawablesArray=new MutableLiveData<>();
     private MutableLiveData<List<Map.Entry<Long,Drawable>>> drawableLive=new MutableLiveData<>();
@@ -114,10 +114,10 @@ public class FragmentChart extends Fragment {
                 List<Long> dateList=new ArrayList<>(longDrawMap.keySet());
                 List<Draw> drawList=new ArrayList<>(getListDraw(longDrawMap));
                 List<Entry> entryList=new ArrayList<>();
-                Log.d(LOG2,"liveDrawblesobserve onChanged: dateList "+dateList.size()+" DrawList: "+drawList.size());
+                //Log.d(LOG2,"liveDrawblesobserve onChanged: dateList "+dateList.size()+" DrawList: "+drawList.size());
 
                 for (Long lo:dateList){
-                    Log.d(LOG2, ""+lo);
+                    //Log.d(LOG2, ""+lo);
                 }
 
                 for (int i=0;i<dateList.size();i++){
@@ -126,7 +126,7 @@ public class FragmentChart extends Fragment {
                     entryList.add(entry);
                 }
                 hourlies.clear();
-                Log.d(LOG2,"EntryList.Size "+entryList.size());
+                //Log.d(LOG2,"EntryList.Size "+entryList.size());
                 createSet(entryList);
 
             }
@@ -136,7 +136,7 @@ public class FragmentChart extends Fragment {
     }
     private List<Draw> getListDraw(Map<Long, Draw> longDrawMap){
         List<Draw> startList=new ArrayList<>(longDrawMap.values());
-        Log.d(LOG2, "getListDraw, startList.size= "+startList.size());
+        //Log.d(LOG2, "getListDraw, startList.size= "+startList.size());
         List<Draw> finishList=new ArrayList<>();
 
         finishList.add(new Draw(startList.get(0).getIdIcon(),startList.get(0).getDrawable()));
@@ -219,14 +219,14 @@ public class FragmentChart extends Fragment {
             maxSize=hourlies.size();
             listKey=new ArrayList<>(getIdIcons(hourlies));
             listDates=new ArrayList<>(getDates(hourlies));
-            Log.d(LOG2, "listKey.Size= "+listKey.size()+"; listDates.Size= "+listDates.size());
+            //Log.d(LOG2, "listKey.Size= "+listKey.size()+"; listDates.Size= "+listDates.size());
             mapIcon=new TreeMap<>();
-            Log.d(LOG2,"DrawablesIcons create");
+           // Log.d(LOG2,"DrawablesIcons create");
         }
         public void toAssembly (){
-            Log.d(LOG2,"toAssembly");
+            //Log.d(LOG2,"toAssembly");
                 for (int i=0;i<listKey.size();i++){
-                    Log.d(LOG2,"i= "+i);
+                    //Log.d(LOG2,"i= "+i);
                     String url=listKey.get(i);
                     toPicas(listDates.get(i),url, i);
                 }
@@ -238,21 +238,21 @@ public class FragmentChart extends Fragment {
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            Log.d(LOG2,count+" "+url +" onBitmapLoaded ");
+                           // Log.d(LOG2,count+" "+url +" onBitmapLoaded ");
                             Drawable drawable=new BitmapDrawable(getResources(),bitmap);
                             mapIcon.put(date,new Draw(url,drawable));
                             if (mapIcon.size()==maxSize) {
-                                Log.d(LOG2,url +" FINISH PICAS onBitmapLoaded "+mapIcon.size());
+                                //Log.d(LOG2,url +" FINISH PICAS onBitmapLoaded "+mapIcon.size());
                                 liveDrawbles.setValue(mapIcon);
                             }
                         }
 
                         @Override
                         public void onBitmapFailed(Drawable errorDrawable) {
-                            Log.d(LOG2,count+" "+url+" onBitmapFailed ");
+                            //Log.d(LOG2,count+" "+url+" onBitmapFailed ");
                             mapIcon.put(date,new Draw(url,null));
                             if (mapIcon.size()==maxSize) {
-                                Log.d(LOG2,url +" FINISH PICAS onBitmapFailed "+mapIcon.size());
+                               // Log.d(LOG2,url +" FINISH PICAS onBitmapFailed "+mapIcon.size());
                                 liveDrawbles.setValue(mapIcon);
                             }
                         }

@@ -1,6 +1,5 @@
 package ram.ramires.openweathersky2.All_Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import java.util.List;
 
 import ram.ramires.openweathersky2.databinding.DailyItemBinding;
 import ram.ramires.openweathersky2.pojo.daily.Daily;
-
-import static ram.ramires.openweathersky2.MainActivity.LOG;
 
 public class Recycler_View_Adapter extends RecyclerView.Adapter<Recycler_View_Adapter.DailyViewHolder> {
 

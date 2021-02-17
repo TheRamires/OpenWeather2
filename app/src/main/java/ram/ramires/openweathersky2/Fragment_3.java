@@ -7,15 +7,11 @@ import androidx.databinding.ObservableField;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import ram.ramires.openweathersky2.databinding.Fragment3Binding;
-
-import static ram.ramires.openweathersky2.FragmentChart.LOG2;
 
 public class Fragment_3 extends Fragment {
     public ObservableField<CharSequence>clear;
@@ -48,7 +44,6 @@ public class Fragment_3 extends Fragment {
     //Edit Text ввод города пользователем
     public void getWeatherByCityName(CharSequence s,int start, int count, int after){
         cityName=""+s.toString();
-        Log.d(LOG2, "Edtit TExt " + s+"; after = "+after);
         if (cityName.length()>3) {
             viewModel.getWether(cityName);
         }

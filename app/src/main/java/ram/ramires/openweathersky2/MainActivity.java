@@ -20,7 +20,6 @@ import ram.ramires.openweathersky2.ViewPager_Instruments.ZoomOutPageTransformer;
 public class MainActivity extends FragmentActivity {
     private String [] titleList;
 
-    public final static String LOG="myLog";
     public static final int REQUEST_CODE_PERMISSION_FINE_LOCATION =1 ;
     private View view;
 

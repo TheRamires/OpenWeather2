@@ -9,9 +9,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
-import static ram.ramires.openweathersky2.MainActivity.LOG;
-
 /* GeoCoder
 в андроид эмуляторе не работате, только на телефоне проверяется*/
 public class GeoJCoder {
@@ -40,7 +37,6 @@ public class GeoJCoder {
             if (addresses.size() > 0) {
                 lat_lon[0]=addresses.get(0).getLatitude();
                 lat_lon[1]=addresses.get(0).getLongitude();
-                Log.d(LOG,""+lat_lon[0]+" "+lat_lon[1]);
                 addresses.clear();
             }
         } catch (IOException e) {
@@ -69,3 +65,4 @@ public class GeoJCoder {
         return city;
     }
 }
+
